@@ -1,0 +1,11 @@
+{
+  "name": "node-storage",
+  "version": "1.0.0",
+  "description": "Storage component to abstract and reuse implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/index.js"
+  },
+  "author": "Jim Sverkmo",
+  "license": "MIT"
+}
