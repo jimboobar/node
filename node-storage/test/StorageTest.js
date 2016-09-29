@@ -2,99 +2,95 @@
 
 
 var Storage = require("../src/Storage"),
-    assert = require("./assert.js"),
-    adapter = {
-      save: function() {},
-      load: function() {},
-      remove: function() {},
-      keys: function() {},
-      pairs: function() {}
-    },
-    modifier = {
-      save: function() {},
-      load: function() {},
-      remove: function() {}
-    };
+    chai = require("chai"),
+    expect = chai.expect;
 
 
-// missing <adapter>
-assert.error("missing <adapter>", function() {
-  new Storage();
+describe("Storage", function() {
+    var stub = function() {},
+        adapter = {
+            save: stub,
+            load: stub,
+            remove: stub,
+            keys: stub,
+            pairs: stub
+        },
+        modifier = {
+            save: stub,
+            load: stub,
+            remove: stub
+        };
+
+    context("errors <adapter>", function() {
+        it("should throw missing <adapter>", function() {
+            expect(Storage).to.throw(/missing <adapter>/);
+        });
+
+        it("should throw missing <adapter.save>", function() {
+            expect(Storage.bind(null, {
+                save: "fail"
+            })).to.throw(/missing <adapter.save>/);
+        });
+
+        it("should throw missing <adapter.load>", function() {
+            expect(Storage.bind(null, {
+                save: stub,
+                load: "fail"
+            })).to.throw(/missing <adapter.load>/);
+        });
+
+        it("should throw missing <adapter.remove>", function() {
+            expect(Storage.bind(null, {
+                save: stub,
+                load: stub,
+                remove: "fail"
+            })).to.throw(/missing <adapter.remove>/);
+        });
+
+        it("should throw missing <adapter.keys>", function() {
+            expect(Storage.bind(null, {
+                save: stub,
+                load: stub,
+                remove: stub,
+                keys: "fail"
+            })).to.throw(/missing <adapter.keys>/);
+        });
+
+        it("should throw missing <adapter.pairs>", function() {
+            expect(Storage.bind(null, {
+                save: stub,
+                load: stub,
+                remove: stub,
+                keys: stub,
+                pairs: "fail"
+            })).to.throw(/missing <adapter.pairs>/);
+        });
+    });
+
+    context("errors <modifier>", function() {
+        it("should throw missing <modifier.save>", function() {
+            expect(Storage.bind(null, adapter, {
+                save: "fail"
+            })).to.throw(/missing <modifier.save>/);
+        });
+
+        it("should throw missing <modifier.load>", function() {
+            expect(Storage.bind(null, adapter, {
+                load: "fail"
+            })).to.throw(/missing <modifier.load>/);
+        });
+
+        it("should throw missing <modifier.remove>", function() {
+            expect(Storage.bind(null, adapter, {
+                remove: "fail"
+            })).to.throw(/missing <modifier.remove>/);
+        });
+
+    });
+
+    context("no error", function() {
+        it("should create instance", function() {
+            expect(new Storage(adapter, modifier)).to.not.throw;
+        });
+    });
 });
-
-// missing <adapter.save>
-assert.error("missing <adapter.save>", function() {
-  new Storage({
-    save: "fail"
-  });
-});
-
-// missing <adapter.load>
-assert.error("missing <adapter.load>", function() {
-  new Storage({
-    save: function() {},
-    load: "fail"
-  });
-});
-
-// missing <adapter.load>
-assert.error("missing <adapter.load>", function() {
-  new Storage({
-    save: function() {},
-    load: "fail"
-  });
-});
-
-// missing <adapter.remove>
-assert.error("missing <adapter.remove>", function() {
-  new Storage({
-    save: function() {},
-    load: function() {},
-    remove: "fail"
-  });
-});
-
-// missing <adapter.keys>
-assert.error("missing <adapter.keys>", function() {
-  new Storage({
-    save: function() {},
-    load: function() {},
-    remove: function() {},
-    keys: "fail"
-  });
-});
-
-// missing <adapter.pairs>
-assert.error("missing <adapter.pairs>", function() {
-  new Storage({
-    save: function() {},
-    load: function() {},
-    remove: function() {},
-    keys: function() {},
-    pairs: "fail"
-  });
-});
-
-// missing <modifier.save>
-assert.error("missing <modifier.save>", function() {
-  new Storage(adapter, {
-    save: "fail"
-  });
-});
-
-// missing <modifier.load>
-assert.error("missing <modifier.load>", function() {
-  new Storage(adapter, {
-    load: "fail"
-  });
-});
-
-// missing <modifier.remove>
-assert.error("missing <modifier.remove>", function() {
-  new Storage(adapter, {
-    remove: "fail"
-  });
-});
-
-// create Storage successfully
-new Storage(adapter, modifier);

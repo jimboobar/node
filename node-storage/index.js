@@ -6,17 +6,20 @@ var Storage = require("./src/Storage"),
 
 
 function Factory() {
-  var api = this;
+    var api = this;
 
-  /////
+    api.wrap = onWrap;
+    api.cache = onCache;
 
-  function storage(adapter, modifier) {
-    return new Storage(adapter, modifier);
-  }
+    /////
 
-  function cache(modifier) {
-    return storage(new CacheAdapter(), modifier);
-  }
+    function onWrap(adapter, modifier) {
+        return new Storage(adapter, modifier);
+    }
+
+    function onCache(modifier) {
+        return onWrap(new CacheAdapter(), modifier);
+    }
 }
 
 module.exports = new Factory();
