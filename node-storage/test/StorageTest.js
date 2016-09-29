@@ -14,11 +14,6 @@ describe("Storage", function() {
             remove: stub,
             keys: stub,
             pairs: stub
-        },
-        modifier = {
-            save: stub,
-            load: stub,
-            remove: stub
         };
 
     context("errors <adapter>", function() {
@@ -90,7 +85,11 @@ describe("Storage", function() {
 
     context("no error", function() {
         it("should create instance", function() {
-            expect(new Storage(adapter, modifier)).to.not.throw;
+            expect(new Storage(adapter, {
+                save: stub,
+                load: stub,
+                remove: stub
+            })).to.be.a("object");
         });
     });
 });
