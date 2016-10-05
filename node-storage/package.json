@@ -2,9 +2,9 @@
   "name": "node-storage",
   "version": "1.0.0",
   "description": "Storage component to abstract and reuse implementation",
-  "main": "index.js",
+  "main": "src/Service.js",
   "scripts": {
-    "test": "mocha test/**/*.js",
+    "test": "istanbul cover _mocha test/**/*.js",
     "test:watch": "mocha --watch test/**/*.js"
   },
   "author": "Jim Sverkmo",
@@ -12,6 +12,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^3.6.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.1.0"
   }
 }

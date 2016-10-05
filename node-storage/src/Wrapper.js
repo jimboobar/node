@@ -6,11 +6,10 @@ var utils = require("./utils"),
     isFn = utils.isFn;
 
 
-module.exports = function Storage(adapter, modifier) {
+module.exports = function Wrapper(adapter) {
     var api = this;
 
-    validateAdapter(adapter);
-    validateModifier(modifier);
+    validate(adapter);
 
     api.save = onSave;
     api.load = onLoad;
@@ -23,26 +22,17 @@ module.exports = function Storage(adapter, modifier) {
     function onSave(key, item) {
         if (!key) newError("missing <key>");
         if (!item) newError("missing <item>");
-        else return adapter.save(key, (modifier.save
-            ? modifier.save(item)
-            : item
-        ));
+        else return adapter.save(key, item);
     }
 
     function onLoad(key) {
         if (!key) newError("missing <key>");
-        else return (modifier.load
-            ? modifier.load(adapter.load(key))
-            : adapter.load(key)
-        );
+        else return adapter.load(key);
     }
 
     function onRemove(key) {
         if (!key) newError("missing <key>");
-        else return (modifier.remove
-            ? modifier.remove(adapter.remove())
-            : adapter.remove(key)
-        );
+        else return adapter.remove(key);
     }
 
     function onKeys() {
@@ -55,22 +45,11 @@ module.exports = function Storage(adapter, modifier) {
 };
 
 
-function validateAdapter(adapter) {
+function validate(adapter) {
     if (!adapter) newError("missing <adapter>");
     if (!isFn(adapter.save)) newError("missing <adapter.save>");
     if (!isFn(adapter.load)) newError("missing <adapter.load>");
     if (!isFn(adapter.remove)) newError("missing <adapter.remove>");
     if (!isFn(adapter.keys)) newError("missing <adapter.keys>");
     if (!isFn(adapter.pairs)) newError("missing <adapter.pairs>");
-}
-
-function validateModifier(modifier) {
-    if (!modifier) return;
-    if (!modFn(modifier.save)) newError("missing <modifier.save>");
-    if (!modFn(modifier.load)) newError("missing <modifier.load>");
-    if (!modFn(modifier.remove)) newError("missing <modifier.remove>");
-}
-
-function modFn(fn) {
-    return !fn || isFn(fn);
 }

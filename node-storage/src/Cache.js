@@ -7,7 +7,7 @@ var utils = require("./utils"),
 
 module.exports = function Cache(data) {
     var api = this,
-        cache = validateAndGet(data);
+        cache = validateAndGet(data || {});
 
     api.save = onSave;
     api.load = onLoad;
@@ -53,7 +53,6 @@ module.exports = function Cache(data) {
 
 
 function validateAndGet(data) {
-    if (!data) return {};
     if (typeof data !== "object") newError("not an object");
     if (Array.isArray(data)) newError("not an object");
     else return data;
